@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  apache:
+    image: httpd
+    volumes:
+      - monvolume:/var/www/html
+    ports:
+      - 8058:80
+  bdd: 
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: toto
+    ports:
+      - 3305:3306
+
+volumes:
+  monvolume : {}
+
+
+    

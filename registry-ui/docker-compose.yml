@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  registry:
+    restart: always
+    image: registry:2.7.0
+    container_name: my-web-container
+    ports:
+      - 5000:5000
+    environment:
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: Registry Realm
+    volumes:
+      - ./data/:/var/lib/registry
+      - ./certs/:/certs
+      - ./auth/:/auth
+
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    ports:
+      - 8088:80
+    environment:
+      REGISTRY_TITLE: "My registry" 
+      NGINX_PROXY_PASS_URL: http://registry:5000
+    depends_on:
+      - registry

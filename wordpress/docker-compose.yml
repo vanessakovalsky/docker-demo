@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+ # Ne pas utiliser d'underscore dans le nom du service, cela génère des erreurs lors de l'utilisation du nom en tant qu'hôte
+  mysql-container:
+    image: mysql:5.7
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+    networks:
+      - if_wordpress
+  
+  wordpress:
+    image: wordpress
+    ports:
+      - 8087:80
+    environment:
+      WORDPRESS_DB_HOST: mysql-container
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
+    networks:
+      - if_wordpress
+    volumes:
+      - db:/var/lib/mysql
+
+networks:
+  if_wordpress: 
+
+volumes:
+  db: 

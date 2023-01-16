@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  db: 
+    build: mariadb/
+    environment:
+      MARIADB_ROOT_PASSWORD: RootPassword
+      MARIADB_USER: apppython
+      MARIADB_PASSWORD: AppPython
+      MARIADB_DATABASE: parc_informatique
+    networks:
+      app_network:
+    volumes:
+      - db_data:/var/lib/mysql
+  app:
+    build: python/
+    environment:
+      DB_USERNAME: apppython
+      DB_PASSWORD: AppPython
+      DB_NAME: parc_informatique
+      DB_HOST: db
+      DB_PORT: '3306'
+    stdin_open: true
+    tty: true
+    networks:
+      app_network:
+volumes:
+  db_data:
+networks:
+  app_network:
